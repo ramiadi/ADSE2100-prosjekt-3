@@ -1,184 +1,573 @@
 <!DOCTYPE html>
 <html lang="no">
-<meta charset="UTF-8">
-<title>Eksperiment: Tastatur, Touch og Stemme</title>
 
-<h2>Eksperiment: To oppgavetyper</h2>
-<p id="phaseTitle"></p>
-<div id="imageContainer"></div>
-<p id="promptText"></p>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Eksperiment: Tastatur, Touch og Stemme</title>
+    <!--
+        Prosjekt: Interaksjonseksperiment – Touchscreen, Tastatur/Mus og Tale
+        Forfatter: Ramin (OsloMet IT-student)
+        Notat: Alt lokalt. Bruker Web Speech API når tilgjengelig. Laster ned CSV lokalt ved slutt.
+    -->
+    <style>
+        /* Enkel, mobil-først responsiv styling med tilgjengelig kontrast og store touch-mål */
+        :root {
+            --max-width: 900px;
+            --accent: #2468f0;
+            --accent-2: #24a85a;
+            --bg: #fbfbfd;
+            --card: #fff;
+            --muted: #666;
+        }
 
-<textarea id="inputField" placeholder="Skriv eller snakk her..." rows="3" cols="50"></textarea><br>
-<button id="voiceButton">🎤 Start stemmesøk</button>
-<button id="submitButton">Send inn</button>
+        html,
+        body {
+            height: 100%;
+        }
 
-<p id="status"></p>
-<p id="result"></p>
-<p id="progress"></p>
+        body {
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 16px;
+            background: var(--bg);
+            color: #111;
+            display: flex;
+            justify-content: center;
+        }
 
-<script>
-    // ----------------------- Konfigurasjon -----------------------
-    const compositionTasks = [
-        ["images/boy.png", "images/boat.png", "images/cat.png"],
-        ["images/apple.png", "images/doctor.png", "images/house.png"],
-        ["images/woman.png", "images/plane.png", "images/baby.png"]
-    ];
+        .container {
+            width: 100%;
+            max-width: var(--max-width);
+        }
 
-    const transcriptionTasks = [
-        "The boy takes his cat on a boat with him.",
-        "The doctor keeps an apple on his desk.",
-        "The woman flies on a plane with her baby."
-    ];
+        header {
+            text-align: center;
+            margin: 8px 0 18px
+        }
 
-    let phase = "composition";  // først composition, så transcription
-    let taskIndex = 0;
-    let startTime;
-    let endTime;
-    let recognition;
-    let results = [["DeltakerID", "Grensesnitt", "Oppgavetype", "Oppgave", "Tid (s)", "Tekst"]];
+        h1 {
+            font-size: 1.25rem;
+            margin: 0
+        }
 
-    const imageContainer = document.getElementById("imageContainer");
-    const promptText = document.getElementById("promptText");
-    const progress = document.getElementById("progress");
-    const inputField = document.getElementById("inputField");
+        main {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06)
+        }
 
-    // ----------------------- Initiering -----------------------
-    showTask();
+        .phase-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center
+        }
 
-    function showTask() {
-        document.getElementById("phaseTitle").innerText =
-            phase === "composition" ? "DEL 1: Lag en setning basert på disse bildene" :
-                "DEL 2: Gjenta setningen nøyaktig";
+        /* Bilder-rutenett */
+        #imageContainer {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 10px 0
+        }
 
-        imageContainer.innerHTML = "";
-        promptText.innerText = "";
-        inputField.value = "";
-        document.getElementById("status").innerText = "";
-        document.getElementById("result").innerText = "";
+        .imageBox {
+            width: 30%;
+            min-width: 90px;
+            text-align: center
+        }
 
-        if (phase === "composition") {
-            // vis bilder
-            const imgs = compositionTasks[taskIndex];
-            imgs.forEach(src => {
-                const img = document.createElement("img");
-                img.src = src;
-                img.style.width = "100px";
-                img.style.margin = "10px";
-                imageContainer.appendChild(img);
+        .imageBox img {
+            width: 100%;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #fff;
+            padding: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06)
+        }
+
+        .caption {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-top: 6px
+        }
+
+        /* Inndatafelt */
+        label[for="inputField"] {
+            display: block;
+            font-size: 0.95rem;
+            margin: 10px 0 6px
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 88px;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #dcdcdc;
+            resize: vertical
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px
+        }
+
+        button {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: none;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.98rem;
+            cursor: pointer
+        }
+
+        .secondary {
+            background: #666
+        }
+
+        .voice {
+            background: var(--accent-2)
+        }
+
+        .status {
+            margin-top: 10px;
+            text-align: center;
+            color: var(--muted)
+        }
+
+        /* Spørreskjema */
+        .questionnaire {
+            margin-top: 14px;
+            border-top: 1px dashed #eee;
+            padding-top: 12px
+        }
+
+        .likert {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .likert label {
+            font-size: 0.9rem;
+            margin-right: 8px
+        }
+
+        .likert .scale {
+            display: flex;
+            gap: 6px
+        }
+
+        .likert input[type="radio"] {
+            width: 20px;
+            height: 20px
+        }
+
+        footer {
+            margin-top: 12px;
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--muted)
+        }
+
+        @media(min-width:720px) {
+            .imageBox {
+                width: 28%
+            }
+
+            h1 {
+                font-size: 1.6rem
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Eksperiment: Tastatur, Touch og Stemme</h1>
+            <p class="muted">To oppgaver: Komposisjon (bildene) og Transkripsjon (skriv nøyaktig setning).</p>
+        </header>
+
+        <main id="main" role="main">
+            <!-- 🟢 STARTSIDE før eksperimentet -->
+            <section id="introScreen">
+                <h2>Velkommen til eksperimentet</h2>
+                <p>Dette eksperimentet sammenligner tre måter å skrive på:
+                    <strong>Tastatur/mus</strong>, <strong>Touch</strong> og <strong>Tale</strong>.
+                </p>
+
+                <p>Du skal gjøre <strong>to typer oppgaver:</strong></p>
+                <ol>
+                    <li><strong>Komposisjon:</strong> Du får se tre bilder. Skriv eller si en kort og meningsfull
+                        setning som beskriver dem. <br>
+                        <em>Eksempel:</em> Hvis du ser <strong>Gutt</strong>, <strong>Katt</strong> og
+                        <strong>Båt</strong>, kan du skrive:
+                        <span style="color:#2468f0">«Gutten tar med katten sin på båten.»</span>
+                    </li>
+                    <li style="margin-top:8px"><strong>Transkripsjon:</strong> Du får se en setning. Skriv den nøyaktig
+                        slik den står.</li>
+                </ol>
+
+                <p>Tiden måles automatisk, så prøv å jobbe naturlig, men uten å stresse. Etter alle oppgavene får du et
+                    kort spørreskjema, og resultatene lastes ned automatisk som en CSV-fil.</p>
+
+                <div style="text-align:center;margin-top:20px">
+                    <button id="startButton"
+                        style="padding:12px 24px;font-size:1rem;border-radius:8px;background:#2468f0;color:white;border:none;cursor:pointer;">
+                        🚀 Start eksperiment
+                    </button>
+                </div>
+            </section>
+
+            <!-- 🔵 EKSPERIMENTDEL (skjules til startknapp trykkes) -->
+            <section id="experimentSection" hidden>
+                <div class="phase-title" id="phaseTitle" aria-live="polite"></div>
+                <div id="imageContainer" aria-hidden="false"></div>
+                <p id="promptText" style="text-align:center;font-weight:600"></p>
+
+                <label for="inputField">Svar (skriv eller bruk mikrofon)</label>
+                <textarea id="inputField" placeholder="Skriv eller snakk her..." aria-label="Svarfelt"></textarea>
+
+                <div class="controls">
+                    <button id="voiceButton" class="voice" aria-pressed="false" aria-label="Start stemmeopptak">🎤
+                        Tale</button>
+                    <button id="submitButton">✅ Send inn</button>
+                    <button id="skipButton" class="secondary">Hopp over</button>
+                </div>
+
+                <div id="status" class="status" aria-live="assertive"></div>
+                <div id="progress" class="status" aria-live="polite"></div>
+
+                <!-- Spørreskjema vises først etter alle oppgaver -->
+                <section id="questionnaire" class="questionnaire" hidden>
+                    <h3>Kort evaluering</h3>
+                    <p>Vennligst vurder følgende på en skala fra 1 (lav) til 5 (høy):</p>
+                    <div>
+                        <div class="likert">
+                            <label for="q1">Hvor fornøyd er du med denne opplevelsen?</label>
+                            <div class="scale" id="q1">
+                                <label><input type="radio" name="q1" value="1">1</label>
+                                <label><input type="radio" name="q1" value="2">2</label>
+                                <label><input type="radio" name="q1" value="3" checked>3</label>
+                                <label><input type="radio" name="q1" value="4">4</label>
+                                <label><input type="radio" name="q1" value="5">5</label>
+                            </div>
+                        </div>
+                        <div class="likert" style="margin-top:8px">
+                            <label for="q2">Hvor mye anstrengelse brukte du?</label>
+                            <div class="scale" id="q2">
+                                <label><input type="radio" name="q2" value="1">1</label>
+                                <label><input type="radio" name="q2" value="2">2</label>
+                                <label><input type="radio" name="q2" value="3" checked>3</label>
+                                <label><input type="radio" name="q2" value="4">4</label>
+                                <label><input type="radio" name="q2" value="5">5</label>
+                            </div>
+                        </div>
+                        <div style="margin-top:8px">
+                            <label for="comments">Kommentarer (valgfritt)</label>
+                            <input id="comments" type="text"
+                                style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd"
+                                aria-label="Kommentarer">
+                        </div>
+                    </div>
+                    <div style="text-align:center;margin-top:10px">
+                        <button id="finishButton">Fullfør og last ned resultater</button>
+                    </div>
+                </section>
+            </section>
+        </main>
+
+
+        <footer>
+            <small>Alle bilder ligger lokalt i /images/. For talesøk anbefales Chrome eller Edge.</small>
+        </footer>
+    </div>
+
+    <script>
+        (async function () {
+            // ------- Konfigurasjon og oppgaver -------
+            const compositionTasks = [
+                [{ src: 'images/boy.png', label: 'Gutt' }, { src: 'images/boat.png', label: 'Båt' }, { src: 'images/cat.png', label: 'Katt' }],
+                [{ src: 'images/apple.png', label: 'Eple' }, { src: 'images/doctor.png', label: 'Lege' }, { src: 'images/house.png', label: 'Hus' }],
+                [{ src: 'images/woman.png', label: 'Kvinne' }, { src: 'images/plane.png', label: 'Fly' }, { src: 'images/baby.png', label: 'Baby' }],
+                [{ src: 'images/man.png', label: 'Mann' }, { src: 'images/dog.png', label: 'Hund' }, { src: 'images/car.png', label: 'Bil' }],
+                [{ src: 'images/girl.png', label: 'Jente' }, { src: 'images/bicycle.png', label: 'Sykkel' }, { src: 'images/tree.png', label: 'Tre' }],
+                [{ src: 'images/teacher.png', label: 'Lærer' }, { src: 'images/book.png', label: 'Bok' }, { src: 'images/classroom.png', label: 'Klasserom' }],
+                [{ src: 'images/chef.png', label: 'Kokk' }, { src: 'images/pizza.png', label: 'Pizza' }, { src: 'images/kitchen.png', label: 'Kjøkken' }],
+                [{ src: 'images/firefighter.png', label: 'Brannmann' }, { src: 'images/firetruck.png', label: 'Brannbil' }, { src: 'images/fire.png', label: 'Ild' }],
+                [{ src: 'images/policeman.png', label: 'Politimann' }, { src: 'images/car.png', label: 'Bil' }, { src: 'images/road.png', label: 'Vei' }],
+                [{ src: 'images/student.png', label: 'Student' }, { src: 'images/laptop.png', label: 'Laptop' }, { src: 'images/coffee.png', label: 'Kaffe' }]
+            ];
+
+
+            const transcriptionTasks = [
+                'Gutten tar med katten sin på båten.',
+                'Legen spiser et eple før han drar hjem.',
+                'Kvinnen flyr med babyen sin på flyet.',
+                'Mannen kjører bilen sin mens hunden ser ut av vinduet.',
+                'Jenta sykler gjennom skogen ved et stort tre.',
+                'Læreren holder en bok foran klassen i klasserommet.',
+                'Kokken lager pizza på kjøkkenet sitt.',
+                'Brannmannen slukker ild med en brannbil.',
+                'Politimannen patruljerer veien i bilen sin.',
+                'Studenten jobber på laptopen sin med en kopp kaffe ved siden av.'
+            ];
+
+
+            // Resultater samles lokalt
+            const results = [];
+
+            let phase = 'composition';
+            let taskIndex = 0;
+            let startTime = null;
+            let recognition = null;
+
+            // Enkel DOM-hjelper
+            const el = id => document.getElementById(id);
+            const phaseTitle = el('phaseTitle');
+            const imageContainer = el('imageContainer');
+            const promptText = el('promptText');
+            const inputField = el('inputField');
+            const status = el('status');
+            const progress = el('progress');
+            const voiceButton = el('voiceButton');
+            const submitButton = el('submitButton');
+            const skipButton = el('skipButton');
+            const questionnaire = el('questionnaire');
+            const finishButton = el('finishButton');
+
+            // Deltakerinfo via modal (erstatter prompt). Returnerer Promise som resolves når info er klar.
+            function getParticipantInfo() {
+                const storedPid = localStorage.getItem('participantID');
+                const storedIface = localStorage.getItem('interfaceType');
+                const pid = storedPid && storedPid.trim() ? storedPid : 'ukjent';
+                const iface = storedIface && storedIface.trim() ? storedIface : 'ukjent';
+                // sørg for at verdiene er lagret for senere
+                if (!storedPid) localStorage.setItem('participantID', pid);
+                if (!storedIface) localStorage.setItem('interfaceType', iface);
+                return { participant: pid, interfaceType: iface };
+            }
+
+            // Få deltakerinfo før vi fortsetter
+            const meta = await getParticipantInfo();
+
+            // ------- Render nåværende oppgave -------
+            function renderTask() {
+                status.textContent = '';
+                inputField.value = '';
+                inputField.style.display = ''; // synlig igjen ved nye oppgaver
+                startTime = null;
+
+                if (phase === 'composition') {
+                    phaseTitle.textContent = 'DEL 1: Lag en kort setning som passer til disse bildene:';
+                    imageContainer.innerHTML = '';
+                    promptText.textContent = '';
+                    const cards = compositionTasks[taskIndex];
+                    cards.forEach(item => {
+                        const box = document.createElement('div');
+                        box.className = 'imageBox';
+                        const img = document.createElement('img');
+                        img.src = item.src;
+                        img.alt = item.label;
+                        const cap = document.createElement('div');
+                        cap.className = 'caption';
+                        cap.textContent = item.label;
+                        box.appendChild(img);
+                        box.appendChild(cap);
+                        imageContainer.appendChild(box);
+                    });
+                    progress.textContent = `Oppgave ${taskIndex + 1} av ${compositionTasks.length}`;
+                } else {
+                    phaseTitle.textContent = 'DEL 2: Skriv eller si setningen nøyaktig slik den står her:';
+                    imageContainer.innerHTML = '';
+                    promptText.textContent = transcriptionTasks[taskIndex];
+                    progress.textContent = `Setning ${taskIndex + 1} av ${transcriptionTasks.length}`;
+                }
+            }
+
+            // ------- Tidtaking og inndata -------
+            inputField.addEventListener('focus', () => { if (!startTime) startTime = performance.now(); });
+            inputField.addEventListener('input', () => { if (!startTime) startTime = performance.now(); });
+
+            // Knapphandlinger
+            submitButton.addEventListener('click', () => handleSubmit(false));
+            skipButton.addEventListener('click', () => handleSubmit(true));
+
+            // Ctrl/Cmd+Enter for innsending (Enter alene gir linjeskift)
+            inputField.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); handleSubmit(false); }
             });
-            progress.innerText = `Oppgave ${taskIndex + 1} av ${compositionTasks.length}`;
-        } else {
-            // vis transkripsjonstekst
-            promptText.innerText = transcriptionTasks[taskIndex];
-            progress.innerText = `Setning ${taskIndex + 1} av ${transcriptionTasks.length}`;
-        }
-    }
 
-    // ----------------------- Tidtaking -----------------------
-    inputField.addEventListener("focus", () => {
-        startTime = performance.now();
-    });
+            function handleSubmit(skipped) {
+                if (!startTime) { alert('Klikk i tekstfeltet eller bruk mikrofon før du sender inn.'); return; }
+                const endTime = performance.now();
+                const duration = ((endTime - startTime) / 1000).toFixed(2);
+                const text = skipped ? '' : inputField.value.trim();
 
-    // ----------------------- Submit -----------------------
-    document.getElementById("submitButton").addEventListener("click", () => {
-        if (!startTime) return alert("Klikk i tekstfeltet eller start stemmesøk først!");
-        endTime = performance.now();
-        const duration = ((endTime - startTime) / 1000).toFixed(2);
-        const text = inputField.value.trim();
+                // Beregn nøyaktighet for transkripsjon
+                let accuracy = '';
+                if (phase === 'transcription') {
+                    const target = transcriptionTasks[taskIndex].trim();
+                    accuracy = computeAccuracy(target, text).toFixed(2);
+                }
 
-        const participant = localStorage.getItem("participantID") ||
-            prompt("Deltaker-ID (f.eks. 1, 2, 3):");
-        localStorage.setItem("participantID", participant);
+                // Lagre rad
+                const row = {
+                    participant: meta.participant,
+                    interface: meta.interfaceType,
+                    taskType: phase,
+                    task: phase === 'composition' ? compositionTasks[taskIndex].map(x => x.label).join('; ') : transcriptionTasks[taskIndex],
+                    time_s: duration,
+                    response: text,
+                    accuracy: accuracy
+                };
+                results.push(row);
 
-        const interfaceType = localStorage.getItem("interfaceType") ||
-            prompt("Grensesnitt (PC, Touch eller Voice):");
-        localStorage.setItem("interfaceType", interfaceType);
+                // Gå videre
+                taskIndex++;
+                if (phase === 'composition' && taskIndex >= compositionTasks.length) { phase = 'transcription'; taskIndex = 0; }
+                else if (phase === 'transcription' && taskIndex >= transcriptionTasks.length) {
+                    showQuestionnaire(); return;
+                }
 
-        results.push([
-            participant,
-            interfaceType,
-            phase,
-            phase === "composition" ? compositionTasks[taskIndex].join(", ") : transcriptionTasks[taskIndex],
-            duration,
-            text
-        ]);
+                renderTask();
+            }
 
-        // Neste oppgave
-        taskIndex++;
-        if (phase === "composition" && taskIndex >= compositionTasks.length) {
-            // bytt til transcription
-            phase = "transcription";
-            taskIndex = 0;
-        } else if (phase === "transcription" && taskIndex >= transcriptionTasks.length) {
-            // ferdig
-            endExperiment();
-            return;
-        }
+            // ------- Talegjenkjenning (Chrome/Edge) -------
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+            if (SpeechRec) {
+                recognition = new SpeechRec();
+                recognition.lang = 'no-NO'; // Norsk talegjenkjenning
+                recognition.interimResults = false;
+                recognition.maxAlternatives = 1;
+                recognition.continuous = false;
 
-        showTask();
-        startTime = undefined;
-    });
+                voiceButton.addEventListener('click', () => {
+                    try {
+                        recognition.start();
+                        status.textContent = '🎙️ Lytter...';
+                        voiceButton.setAttribute('aria-pressed', 'true');
+                        startTime = startTime || performance.now();
+                    } catch (err) {
+                        status.textContent = '⚠️ Kan ikke starte mikrofon: ' + err.message;
+                    }
+                });
 
-    // ----------------------- Stemmegjenkjenning -----------------------
-    if ('webkitSpeechRecognition' in window) {
-        recognition = new webkitSpeechRecognition();
-        recognition.lang = "en-US"; // bruk "no-NO" om du vil teste norsk
-        recognition.continuous = false;
-        recognition.interimResults = false;
+                recognition.onresult = (ev) => {
+                    const text = ev.results[0][0].transcript;
+                    inputField.value = text;
+                    status.textContent = '🟢 Opptak fullført.';
+                    voiceButton.setAttribute('aria-pressed', 'false');
+                };
+                recognition.onerror = (ev) => {
+                    status.textContent = '⚠️ Talegjenkjenning feil: ' + (ev.error || ev.message);
+                    voiceButton.setAttribute('aria-pressed', 'false');
+                };
+                recognition.onend = () => { voiceButton.setAttribute('aria-pressed', 'false'); };
+            } else {
+                voiceButton.style.display = 'none';
+                status.textContent = '❌ Stemmesøk ikke støttet i denne nettleseren.';
+            }
 
-        document.getElementById("voiceButton").addEventListener("click", () => {
-            document.getElementById("status").innerText = "🎙️ Lytter...";
-            recognition.start();
-            startTime = performance.now();
-        });
+            // ------- Spørreskjema flyt -------
+            function showQuestionnaire() {
+                document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
+                questionnaire.hidden = false;
+                phaseTitle.textContent = 'Evaluering';
+                promptText.textContent = '';
+                inputField.style.display = 'none';
+                document.querySelector('.controls').style.display = 'none';
+            }
 
-        recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            inputField.value = transcript;
-            document.getElementById("status").innerText = "🟢 Opptak fullført.";
-            endTime = performance.now();
-        };
+            finishButton.addEventListener('click', () => {
+                const q1 = document.querySelector('input[name="q1"]:checked')?.value || '';
+                const q2 = document.querySelector('input[name="q2"]:checked')?.value || '';
+                const comments = el('comments').value || '';
 
-        recognition.onerror = (event) => {
-            document.getElementById("status").innerText = "⚠️ Feil ved talegjenkjenning: " + event.error;
-        };
-    } else {
-        document.getElementById("voiceButton").style.display = "none";
-        document.getElementById("status").innerText = "❌ Nettleseren støtter ikke stemmesøk (bruk Chrome).";
-    }
+                results.push({
+                    participant: meta.participant,
+                    interface: meta.interfaceType,
+                    taskType: 'questionnaire',
+                    task: `q1:${q1}; q2:${q2}`,
+                    time_s: '',
+                    response: comments,
+                    accuracy: ''
+                });
 
-    // ----------------------- CSV-eksport -----------------------
-    function endExperiment() {
-        document.getElementById("phaseTitle").innerText = "✅ Eksperiment ferdig";
-        imageContainer.innerHTML = "";
-        promptText.innerText = "";
-        inputField.style.display = "none";
-        document.getElementById("voiceButton").style.display = "none";
-        document.getElementById("submitButton").style.display = "none";
-        progress.innerText = "";
-        document.getElementById("status").innerText = "Resultatfil lastes ned...";
+                downloadCSV(results, `eksperiment_resultater_${meta.participant}.csv`);
+                localStorage.removeItem('participantID');
+                localStorage.removeItem('interfaceType');
 
-        downloadCSV(results, "eksperiment_toOppgaver.csv");
-        localStorage.removeItem("participantID");
-        localStorage.removeItem("interfaceType");
-    }
+                document.body.innerHTML = '<div style="padding:30px;text-align:center"><h2>Takk for deltakelsen! ✅</h2><p>Resultatfilen ble lastet ned.</p></div>';
+            });
 
-    function downloadCSV(data, filename) {
-        let csvContent = data.map(e => e.map(x => `"${x}"`).join(",")).join("\n");
-        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", filename);
-        link.click();
-    }
-</script>
+            // ------- Verktøyfunksjoner -------
+            function computeAccuracy(target, actual) {
+                const a = target.trim().toLowerCase();
+                const b = (actual || '').trim().toLowerCase();
+                if (a.length === 0) return 0;
+                if (a === b) return 100;
+                const dist = levenshtein(a, b);
+                const maxL = Math.max(a.length, b.length);
+                return (1 - dist / maxL) * 100;
+            }
 
-<p style="font-size:12px; color:gray; text-align:center;">
-    Icons by
-    <a href="https://www.flaticon.com/authors/freepik">Freepik</a>,
-    <a href="https://www.flaticon.com/authors/smashicons">Smashicons</a>
-    from <a href="https://www.flaticon.com/">Flaticon</a>
-</p>
+            function levenshtein(a, b) {
+                const m = a.length,
+                    n = b.length;
+                const dp = Array.from({ length: m + 1 }, () => new Array(n + 1));
+                for (let i = 0; i <= m; i++) dp[i][0] = i;
+                for (let j = 0; j <= n; j++) dp[0][j] = j;
+                for (let i = 1; i <= m; i++)
+                    for (let j = 1; j <= n; j++) {
+                        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+                        dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost);
+                    }
+                return dp[m][n];
+            }
+
+            function downloadCSV(objArray, filename) {
+                if (!objArray || objArray.length === 0) return;
+                const keys = ['participant', 'interface', 'taskType', 'task', 'time_s', 'response', 'accuracy'];
+                const lines = [keys.join(',')];
+                for (const row of objArray) {
+                    const vals = keys.map(k => ('' + (row[k] || '')).replace(/"/g, '""'));
+                    lines.push(vals.map(v => `"${v}"`).join(','));
+                }
+                const csv = lines.join('\n');
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename || 'resultater.csv';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1500);
+            }
+
+            // Vent til brukeren trykker "Start"
+            document.getElementById('startButton').addEventListener('click', () => {
+                document.getElementById('introScreen').hidden = true;
+                document.getElementById('experimentSection').hidden = false;
+                renderTask();
+            });
+
+
+            // Tilgjengelig for feilsøking om ønskelig
+            window._experiment = { results, renderTask, downloadCSV };
+        })();
+    </script>
+</body>
 
 </html>
