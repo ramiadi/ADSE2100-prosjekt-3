@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="no">
+<meta charset="UTF-8">
+<title>Eksperiment: Tastatur, Touch og Stemme</title>
+
+<h2>Eksperiment: To oppgavetyper</h2>
+<p id="phaseTitle"></p>
+<div id="imageContainer"></div>
+<p id="promptText"></p>
+
+<textarea id="inputField" placeholder="Skriv eller snakk her..." rows="3" cols="50"></textarea><br>
+<button id="voiceButton">🎤 Start stemmesøk</button>
+<button id="submitButton">Send inn</button>
+
+<p id="status"></p>
+<p id="result"></p>
+<p id="progress"></p>
+
+<script>
+    // ----------------------- Konfigurasjon -----------------------
+    const compositionTasks = [
+        ["boy.png", "boat.png", "cat.png"],
+        ["apple.png", "doctor.png", "house.png"],
+        ["woman.png", "plane.png", "baby.png"]
+    ];
+
+    const transcriptionTasks = [
+        "The boy takes his cat on a boat with him.",
+        "The doctor keeps an apple on his desk.",
+        "The woman flies on a plane with her baby."
+    ];
+
+    let phase = "composition";  // først composition, så transcription
+    let taskIndex = 0;
+    let startTime;
+    let endTime;
+    let recognition;
+    let results = [["DeltakerID", "Grensesnitt", "Oppgavetype", "Oppgave", "Tid (s)", "Tekst"]];
+
+    const imageContainer = document.getElementById("imageContainer");
+    const promptText = document.getElementById("promptText");
+    const progress = document.getElementById("progress");
+    const inputField = document.getElementById("inputField");
+
+    // ----------------------- Initiering -----------------------
+    showTask();
+
+    function showTask() {
+        document.getElementById("phaseTitle").innerText =
+            phase === "composition" ? "DEL 1: Lag en setning basert på disse bildene" :
+                "DEL 2: Gjenta setningen nøyaktig";
+
+        imageContainer.innerHTML = "";
+        promptText.innerText = "";
+        inputField.value = "";
+        document.getElementById("status").innerText = "";
+        document.getElementById("result").innerText = "";
+
+        if (phase === "composition") {
+            // vis bilder
+            const imgs = compositionTasks[taskIndex];
+            imgs.forEach(src => {
+                const img = document.createElement("img");
+                img.src = src;
+                img.style.width = "100px";
+                img.style.margin = "10px";
+                imageContainer.appendChild(img);
+            });
+            progress.innerText = `Oppgave ${taskIndex + 1} av ${compositionTasks.length}`;
+        } else {
+            // vis transkripsjonstekst
+            promptText.innerText = transcriptionTasks[taskIndex];
+            progress.innerText = `Setning ${taskIndex + 1} av ${transcriptionTasks.length}`;
+        }
+    }
+
+    // ----------------------- Tidtaking -----------------------
+    inputField.addEventListener("focus", () => {
+        startTime = performance.now();
+    });
+
+    // ----------------------- Submit -----------------------
+    document.getElementById("submitButton").addEventListener("click", () => {
+        if (!startTime) return alert("Klikk i tekstfeltet eller start stemmesøk først!");
+        endTime = performance.now();
+        const duration = ((endTime - startTime) / 1000).toFixed(2);
+        const text = inputField.value.trim();
+
+        const participant = localStorage.getItem("participantID") ||
+            prompt("Deltaker-ID (f.eks. 1, 2, 3):");
+        localStorage.setItem("participantID", participant);
+
+        const interfaceType = localStorage.getItem("interfaceType") ||
+            prompt("Grensesnitt (PC, Touch eller Voice):");
+        localStorage.setItem("interfaceType", interfaceType);
+
+        results.push([
+            participant,
+            interfaceType,
+            phase,
+            phase === "composition" ? compositionTasks[taskIndex].join(", ") : transcriptionTasks[taskIndex],
+            duration,
+            text
+        ]);
+
+        // Neste oppgave
+        taskIndex++;
+        if (phase === "composition" && taskIndex >= compositionTasks.length) {
+            // bytt til transcription
+            phase = "transcription";
+            taskIndex = 0;
+        } else if (phase === "transcription" && taskIndex >= transcriptionTasks.length) {
+            // ferdig
+            endExperiment();
+            return;
+        }
+
+        showTask();
+        startTime = undefined;
+    });
+
+    // ----------------------- Stemmegjenkjenning -----------------------
+    if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.lang = "en-US"; // bruk "no-NO" om du vil teste norsk
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        document.getElementById("voiceButton").addEventListener("click", () => {
+            document.getElementById("status").innerText = "🎙️ Lytter...";
+            recognition.start();
+            startTime = performance.now();
+        });
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            inputField.value = transcript;
+            document.getElementById("status").innerText = "🟢 Opptak fullført.";
+            endTime = performance.now();
+        };
+
+        recognition.onerror = (event) => {
+            document.getElementById("status").innerText = "⚠️ Feil ved talegjenkjenning: " + event.error;
+        };
+    } else {
+        document.getElementById("voiceButton").style.display = "none";
+        document.getElementById("status").innerText = "❌ Nettleseren støtter ikke stemmesøk (bruk Chrome).";
+    }
+
+    // ----------------------- CSV-eksport -----------------------
+    function endExperiment() {
+        document.getElementById("phaseTitle").innerText = "✅ Eksperiment ferdig";
+        imageContainer.innerHTML = "";
+        promptText.innerText = "";
+        inputField.style.display = "none";
+        document.getElementById("voiceButton").style.display = "none";
+        document.getElementById("submitButton").style.display = "none";
+        progress.innerText = "";
+        document.getElementById("status").innerText = "Resultatfil lastes ned...";
+
+        downloadCSV(results, "eksperiment_toOppgaver.csv");
+        localStorage.removeItem("participantID");
+        localStorage.removeItem("interfaceType");
+    }
+
+    function downloadCSV(data, filename) {
+        let csvContent = data.map(e => e.map(x => `"${x}"`).join(",")).join("\n");
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.click();
+    }
+</script>
+
+</html>
