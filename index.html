@@ -666,22 +666,32 @@
                 }
                 else if (phase === 'paragraph') {
                     const target = paragraphTasks[taskIndex].instruction.trim();
-                    accuracy = computeAccuracy(targer, text).toFixed(2)
+                    accuracy = computeAccuracy(target, text).toFixed(2);
                 }
 
                 // Lagre rad
+                let taskDescription = '';
+                if (phase === 'composition') {
+                    taskDescription = compositionTasks[taskIndex].map(x => x.label).join('; ');
+                }
+                else if (phase === 'transcription') {
+                    taskDescription = transcriptionTasks[taskIndex];
+                }
+                else if (phase === 'paragraph') {
+                    taskDescription = paragraphTasks[taskIndex].topic;
+                }
+
                 const row = {
                     participant: meta.participant,
                     interface: meta.interfaceType,
                     taskType: phase,
-                    task: phase === 'composition'
-                        ? compositionTasks[taskIndex].map(x => x.label).join('; ')
-                        : transcriptionTasks[taskIndex],
+                    task: taskDescription,
                     time_s: duration,
                     response: text,
                     accuracy: accuracy
                 };
                 results.push(row);
+
 
                 // Gå videre
                 taskIndex++;
@@ -846,11 +856,6 @@
 
             // Tilgjengelig for feilsøking om ønskelig
             window._experiment = { results, renderTask, downloadCSV };
-
-            // --- Forbedring: sørg for at bildene forblir synlige når brukeren fokuserer tekstfeltet ---
-            // På mobile enheter vil virtuelt tastatur redusere viewport-høyden. Når brukeren
-            // fokuserer inn i tekstfeltet, rul med en liten forsinkelse slik at nettleseren
-            // har tid til å vise tastaturet, og sørg for at bildebeholderen er sentrert i visningen.
         })();
     </script>
 </body>
