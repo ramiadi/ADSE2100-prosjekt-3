@@ -664,6 +664,10 @@
                     const target = transcriptionTasks[taskIndex].trim();
                     accuracy = computeAccuracy(target, text).toFixed(2);
                 }
+                else if (phase === 'paragraph') {
+                    const target = paragraphTasks[taskIndex].instruction.trim();
+                    accuracy = computeAccuracy(targer, text).toFixed(2)
+                }
 
                 // Lagre rad
                 const row = {
@@ -847,29 +851,6 @@
             // På mobile enheter vil virtuelt tastatur redusere viewport-høyden. Når brukeren
             // fokuserer inn i tekstfeltet, rul med en liten forsinkelse slik at nettleseren
             // har tid til å vise tastaturet, og sørg for at bildebeholderen er sentrert i visningen.
-            try {
-                if (inputField) {
-                    const scrollImagesIntoView = () => {
-                        if (imageContainer) {
-                            imageContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
-                    };
-
-                    inputField.addEventListener('focus', () => setTimeout(scrollImagesIntoView, 350));
-                    // also handle focusin (some browsers) and touchstart to improve responsiveness
-                    inputField.addEventListener('focusin', () => setTimeout(scrollImagesIntoView, 300));
-                    inputField.addEventListener('touchstart', () => setTimeout(scrollImagesIntoView, 300));
-
-                    // If visualViewport is supported, re-scroll when it resizes (keyboard open/close)
-                    if (window.visualViewport) {
-                        window.visualViewport.addEventListener('resize', () => {
-                            if (document.activeElement === inputField) scrollImagesIntoView();
-                        });
-                    }
-                }
-            } catch (e) {
-                console.warn('Could not attach keyboard/viewport helpers:', e);
-            }
         })();
     </script>
 </body>
