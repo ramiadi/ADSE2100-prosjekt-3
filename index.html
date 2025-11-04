@@ -553,6 +553,20 @@
             const questionnaire = el('questionnaire');
             const finishButton = el('finishButton');
 
+            // Start-knappen: lagre valgt metode og start eksperimentet
+            document.getElementById('startButton').addEventListener('click', () => {
+                const iface = document.getElementById('interfaceType').value.trim().toLowerCase();
+                localStorage.setItem('interfaceType', iface);
+
+                // Oppdater meta direkte slik at riktig interface brukes videre
+                meta.interfaceType = iface;
+
+                document.getElementById('introScreen').hidden = true;
+                document.getElementById('experimentSection').hidden = false;
+                renderTask();
+            });
+
+
             // Deltakerinfo via modal 
             function getParticipantInfo() {
                 const storedPid = localStorage.getItem('participantID');
@@ -653,6 +667,7 @@
             });
 
             function handleSubmit(skipped) {
+                meta.interfaceType = localStorage.getItem('interfaceType') || meta.interfaceType;
                 if (!startTime) { alert('⚠️ Du må skrive eller snakke før du sender inn.'); return; }
                 const endTime = performance.now();
                 const duration = ((endTime - startTime) / 1000).toFixed(2);
@@ -821,12 +836,24 @@
 
             function downloadCSV(objArray, filename) {
                 if (!objArray || objArray.length === 0) return;
+
                 const keys = ['participant', 'interface', 'taskType', 'task', 'time_s', 'response', 'accuracy'];
                 const lines = [keys.join(',')];
+
                 for (const row of objArray) {
-                    const vals = keys.map(k => ('' + (row[k] || '')).replace(/"/g, '""'));
-                    lines.push(vals.map(v => `"${v}"`).join(','));
+                    const vals = keys.map(k => {
+                        let v = (row[k] || '').toString().trim();
+
+                        // Fjern uønskede tegn og linjeskift
+                        v = v.replace(/(\r\n|\n|\r)/g, ' '); // linjeskift → mellomrom
+                        v = v.replace(/[";]/g, '');          // fjern " og ;
+                        v = v.replace(/,/g, ' ');            // komma i tekst → mellomrom
+                        v = v.normalize('NFC');              // sikre norske tegn æøå
+                        return v;
+                    });
+                    lines.push(vals.join(','));
                 }
+
                 const csv = lines.join('\n');
                 const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                 const url = URL.createObjectURL(blob);
@@ -837,22 +864,6 @@
                 a.click();
                 setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1500);
             }
-
-            // Vent til brukeren trykker "Start"
-            document.getElementById('startButton').addEventListener('click', () => {
-                document.getElementById('introScreen').hidden = true;
-                document.getElementById('experimentSection').hidden = false;
-                renderTask();
-            });
-
-            document.getElementById('startButton').addEventListener('click', () => {
-                const iface = document.getElementById('interfaceType').value;
-                localStorage.setItem('interfaceType', iface);
-                document.getElementById('introScreen').hidden = true;
-                document.getElementById('experimentSection').hidden = false;
-                renderTask();
-            });
-
 
             // Tilgjengelig for feilsøking om ønskelig
             window._experiment = { results, renderTask, downloadCSV };

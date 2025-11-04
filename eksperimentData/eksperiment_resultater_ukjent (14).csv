@@ -1,0 +1,25 @@
+participant,interface,taskType,task,time_s,response,accuracy
+ukjent,keyboard,composition,Gutt Båt Katt,2.84,jkk,
+ukjent,keyboard,composition,Eple Lege Hus,0.64,kjk,
+ukjent,keyboard,composition,Kvinne Fly Baby,0.45,kjkj,
+ukjent,keyboard,composition,Mann Hund Bil,0.66,kjk,
+ukjent,keyboard,composition,Jente Sykkel Tre,0.51,kjjk,
+ukjent,keyboard,composition,Lærer Bok Klasserom,0.51,jk,
+ukjent,keyboard,composition,Kokk Pizza Kjøkken,0.59,kjjkjk,
+ukjent,keyboard,composition,Brannmann Brannbil Ild,0.54,jkjk,
+ukjent,keyboard,composition,Politimann Bil Vei,0.51,jkjk,
+ukjent,keyboard,composition,Student Laptop Kaffe,0.50,jkjk,
+ukjent,keyboard,transcription,Gutten tar med katten sin på båten.,0.67,jkjk,2.86
+ukjent,keyboard,transcription,Legen spiser et eple før han drar hjem.,0.49,kjkj,2.56
+ukjent,keyboard,transcription,Kvinnen flyr med babyen sin på flyet.,0.40,jk,0.00
+ukjent,keyboard,transcription,Mannen kjører bilen sin mens hunden ser ut av vinduet.,0.45,jkkj,3.70
+ukjent,keyboard,transcription,Jenta sykler gjennom skogen ved et stort tre.,0.46,kjkj,6.67
+ukjent,keyboard,transcription,Læreren holder en bok foran klassen i klasserommet.,0.55,jkjkjk,5.88
+ukjent,keyboard,transcription,Kokken lager pizza på kjøkkenet sitt.,0.55,kjjk,8.11
+ukjent,keyboard,transcription,Brannmannen slukker ild med en brannbil.,0.68,jkkj,5.00
+ukjent,keyboard,transcription,Politimannen patruljerer veien i bilen sin.,0.50,jkjk,2.33
+ukjent,keyboard,transcription,Studenten jobber på laptopen sin med en kopp kaffe ved siden av.,0.83,jkjkj,4.69
+ukjent,keyboard,paragraph,Svarte hull,0.67,jkkj,1.52
+ukjent,keyboard,paragraph,Livet i rommet,0.70,jkkjjk,0.64
+ukjent,keyboard,paragraph,Første menneske i rommet,0.60,jkjk,1.84
+ukjent,keyboard,questionnaire,q1:3 q2:5,,jkkj,
