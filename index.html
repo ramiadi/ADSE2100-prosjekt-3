@@ -211,7 +211,8 @@
 
         .imageBox {
             width: 31%;
-            min-width: 120px;
+            /* reduced min-width to improve layout on narrow screens and avoid overflow/overlap */
+            min-width: 90px;
             background: #fff;
             padding: 8px;
             border-radius: 10px;
@@ -318,11 +319,24 @@
         @media(max-width:720px) {
             .imageBox {
                 width: 48%;
+                /* allow smaller min width on narrow viewports */
+                min-width: 80px;
             }
 
             .controls button {
                 min-width: 86px;
                 padding: 10px;
+            }
+        }
+
+        /* Extra support for very narrow devices */
+        @media(max-width:420px) {
+            .imageBox {
+                min-width: 72px;
+            }
+
+            .imageBox img {
+                height: 90px;
             }
         }
 
@@ -539,7 +553,7 @@
             const questionnaire = el('questionnaire');
             const finishButton = el('finishButton');
 
-            // Deltakerinfo via modal (erstatter prompt). Returnerer Promise som resolves når info er klar.
+            // Deltakerinfo via modal 
             function getParticipantInfo() {
                 const storedPid = localStorage.getItem('participantID');
                 const storedIface = localStorage.getItem('interfaceType');
@@ -554,7 +568,7 @@
             // Få deltakerinfo før vi fortsetter
             const meta = await getParticipantInfo();
 
-            // ------- Render nåværende oppgave -------
+            //Render nåværende oppgave
             function renderTask() {
                 status.textContent = '';
                 inputField.value = '';
@@ -618,7 +632,7 @@
             }
 
 
-            // ------- Tidtaking og inndata -------
+            // Tidtaking og inndata -------
             let hasStartedTyping = false;
 
             // Start tid kun når brukeren faktisk begynner å skrive (ikke bare klikker)
@@ -821,6 +835,34 @@
 
             // Tilgjengelig for feilsøking om ønskelig
             window._experiment = { results, renderTask, downloadCSV };
+
+            // --- Forbedring: sørg for at bildene forblir synlige når brukeren fokuserer tekstfeltet ---
+            // På mobile enheter vil virtuelt tastatur redusere viewport-høyden. Når brukeren
+            // fokuserer inn i tekstfeltet, rul med en liten forsinkelse slik at nettleseren
+            // har tid til å vise tastaturet, og sørg for at bildebeholderen er sentrert i visningen.
+            try {
+                if (inputField) {
+                    const scrollImagesIntoView = () => {
+                        if (imageContainer) {
+                            imageContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    };
+
+                    inputField.addEventListener('focus', () => setTimeout(scrollImagesIntoView, 350));
+                    // also handle focusin (some browsers) and touchstart to improve responsiveness
+                    inputField.addEventListener('focusin', () => setTimeout(scrollImagesIntoView, 300));
+                    inputField.addEventListener('touchstart', () => setTimeout(scrollImagesIntoView, 300));
+
+                    // If visualViewport is supported, re-scroll when it resizes (keyboard open/close)
+                    if (window.visualViewport) {
+                        window.visualViewport.addEventListener('resize', () => {
+                            if (document.activeElement === inputField) scrollImagesIntoView();
+                        });
+                    }
+                }
+            } catch (e) {
+                console.warn('Could not attach keyboard/viewport helpers:', e);
+            }
         })();
     </script>
 </body>
