@@ -180,13 +180,164 @@
             color: var(--muted)
         }
 
-        @media(min-width:720px) {
+        /* Visuell forbedring */
+        body {
+            background: linear-gradient(180deg, #f6f9ff 0%, var(--bg) 40%);
+        }
+
+        main {
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+
+        .container {
+            padding-bottom: 24px;
+        }
+
+        header h1 {
+            font-weight: 700;
+            color: #0b1a4a;
+            margin-bottom: 6px;
+        }
+
+        #introScreen h2 {
+            margin-top: 0;
+            color: #123;
+        }
+
+        /* Kort/scene */
+        main,
+        .modal {
+            max-width: 980px;
+            margin: 6px auto;
+        }
+
+        /* Bilder: mer luft og hover-effekt */
+        #imageContainer {
+            gap: 14px;
+            margin: 12px 0 18px;
+        }
+
+        .imageBox {
+            width: 31%;
+            min-width: 120px;
+            background: #fff;
+            padding: 8px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(11, 26, 74, 0.06);
+            transition: transform .14s ease, box-shadow .14s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .imageBox:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(11, 26, 74, 0.08);
+        }
+
+        .imageBox img {
+            height: 120px;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            background: transparent;
+            padding: 6px;
+        }
+
+        .caption {
+            font-weight: 600;
+            color: #234;
+            margin-top: 8px;
+        }
+
+        /* Tekstfelt større og mer behagelig */
+        textarea {
+            min-height: 140px;
+            font-size: 1.03rem;
+            line-height: 1.35;
+            padding: 12px;
+        }
+
+        /* Knappstiler */
+        button {
+            box-shadow: 0 6px 18px rgba(36, 104, 240, 0.12);
+            transition: transform .12s ease, box-shadow .12s ease;
+        }
+
+        button:active {
+            transform: translateY(1px) scale(.998);
+        }
+
+        .secondary {
+            background: #666;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .voice {
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 100%);
+        }
+
+        button:focus {
+            outline: 3px solid rgba(36, 104, 240, 0.18);
+            outline-offset: 3px;
+        }
+
+        /* Controls layout på mobil/desktop */
+        .controls {
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .controls button {
+            padding: 10px 16px;
+            min-width: 110px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        /* Visuell progress bar */
+        #progress {
+            max-width: 760px;
+            margin: 10px auto 0;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 80%;
+            height: 10px;
+            background: #eef2ff;
+            border-radius: 999px;
+            margin: 8px auto 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 100%);
+            transition: width .4s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        @media(max-width:720px) {
             .imageBox {
-                width: 28%
+                width: 48%;
             }
 
-            h1 {
-                font-size: 1.6rem
+            .controls button {
+                min-width: 86px;
+                padding: 10px;
+            }
+        }
+
+        @media(min-width:1200px) {
+            .imageBox {
+                width: 22%;
             }
         }
     </style>
@@ -202,33 +353,63 @@
         <main id="main" role="main">
             <!-- 🟢 STARTSIDE før eksperimentet -->
             <section id="introScreen">
-                <h2>Velkommen til eksperimentet</h2>
-                <p>Dette eksperimentet sammenligner tre måter å skrive på:
-                    <strong>Tastatur/mus</strong>, <strong>Touch</strong> og <strong>Tale</strong>.
+                <h2>Velkommen til eksperimentet 👋</h2>
+                <p>
+                    Du skal sammenligne tre måter å skrive på: <strong>Tastatur/mus</strong>, <strong>Touch</strong> og
+                    <strong>Tale</strong>.
+                    Målet er å finne ut hvilken metode som er mest effektiv og komfortabel.
                 </p>
 
-                <p>Du skal gjøre <strong>to typer oppgaver:</strong></p>
-                <ol>
-                    <li><strong>Komposisjon:</strong> Du får se tre bilder. Skriv eller si en kort og meningsfull
-                        setning som beskriver dem. <br>
-                        <em>Eksempel:</em> Hvis du ser <strong>Gutt</strong>, <strong>Katt</strong> og
-                        <strong>Båt</strong>, kan du skrive:
-                        <span style="color:#2468f0">«Gutten tar med katten sin på båten.»</span>
-                    </li>
-                    <li style="margin-top:8px"><strong>Transkripsjon:</strong> Du får se en setning. Skriv den nøyaktig
-                        slik den står.</li>
-                </ol>
+                <div style="background:#f3f7ff;padding:14px 18px;border-radius:10px;margin:14px 0;">
+                    <h3 style="margin-top:0;color:#123;">🧭 Slik fungerer det</h3>
+                    <ul style="margin-left:18px;line-height:1.5">
+                        <li><strong>Del 1:</strong> Se tre bilder og lag en kort setning som passer.</li>
+                    </ul>
 
-                <p>Tiden måles automatisk, så prøv å jobbe naturlig, men uten å stresse. Etter alle oppgavene får du et
-                    kort spørreskjema, og resultatene lastes ned automatisk som en CSV-fil.</p>
+                    <!-- 🖼️ Eksempelbildevisning -->
+                    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:12px 0;">
+                        <div style="text-align:center;">
+                            <img src="images/girl.png" alt="Jente" style="width:80px;height:80px;object-fit:contain;">
+                            <div style="font-size:0.9rem;color:#333;">Jente</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <img src="images/pizza.png" alt="Pizza" style="width:80px;height:80px;object-fit:contain;">
+                            <div style="font-size:0.9rem;color:#333;">Pizza</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <img src="images/plane.png" alt="Fly" style="width:80px;height:80px;object-fit:contain;">
+                            <div style="font-size:0.9rem;color:#333;">Fly</div>
+                        </div>
+                    </div>
 
-                <div style="text-align:center;margin-top:20px">
-                    <button id="startButton"
-                        style="padding:12px 24px;font-size:1rem;border-radius:8px;background:#2468f0;color:white;border:none;cursor:pointer;">
-                        🚀 Start eksperiment
-                    </button>
+                    <p style="text-align:center;font-size:0.95rem;margin-top:4px;">
+                        <em>Eksempel:</em> <span style="color:#2468f0;">“Jenta tar med seg pizzaen sin til flyet”</span>
+                    </p>
+
+                    <ul style="margin-left:18px;line-height:1.5;margin-top:12px;">
+                        <li><strong>Del 2:</strong> Skriv en setning nøyaktig slik den vises.</li>
+                        <li><strong>Del 3:</strong> Skriv et kort avsnitt på 2–3 setninger om et gitt tema.</li>
+                    </ul>
+
+                    <p style="margin-top:10px">Du kan bruke tastatur, berøring eller taleopptak 🎙️.
+                        Tiden starter <strong>først når du begynner å skrive eller snakke</strong>.</p>
                 </div>
+
+                <label for="interfaceType"><strong>Velg metode:</strong></label><br>
+                <select id="interfaceType" style="padding:6px 10px;border-radius:6px;margin-top:4px;">
+                    <option value="keyboard">Tastatur / mus</option>
+                    <option value="touch">Touch (mobil / nettbrett)</option>
+                    <option value="voice">Tale</option>
+                </select>
+
+                <p style="text-align:center;margin-top:22px;">
+                    <button id="startButton"
+                        style="padding:14px 30px;font-size:1rem;border-radius:8px;background:#2468f0;color:white;border:none;cursor:pointer;font-weight:600;">
+                        🚀 Start eksperimentet
+                    </button>
+                </p>
             </section>
+
 
             <!-- 🔵 EKSPERIMENTDEL (skjules til startknapp trykkes) -->
             <section id="experimentSection" hidden>
@@ -247,7 +428,12 @@
                 </div>
 
                 <div id="status" class="status" aria-live="assertive"></div>
-                <div id="progress" class="status" aria-live="polite"></div>
+                <div id="progress" class="status" aria-live="polite">
+                    <div class="progress-bar" aria-hidden="true">
+                        <div class="progress-fill" style="width:0%"></div>
+                    </div>
+                    <div class="progress-text"></div>
+                </div>
 
                 <!-- Spørreskjema vises først etter alle oppgaver -->
                 <section id="questionnaire" class="questionnaire" hidden>
@@ -324,6 +510,21 @@
                 'Studenten jobber på laptopen sin med en kopp kaffe ved siden av.'
             ];
 
+            const paragraphTasks = [
+                {
+                    topic: "Svarte hull",
+                    instruction: "Et svart hull er et sted i verdensrommet med ekstrem tyngdekraft. Alt som kommer for nær, blir dratt inn. Ikke engang lys slipper ut"
+                },
+                {
+                    topic: "Livet i rommet",
+                    instruction: "Astronauter må feste seg når de sover, ellers flyter de rundt . De spiser mat i poser og pusser tennene uten vann. Alt flyter i vektløshet, til og med tårene"
+                },
+                {
+                    topic: "Første menneske i rommet",
+                    instruction: "Den første personen i verdensrommet het Jurij Gagarin. Han kom fra Russland og reiste rundt jorden i 1961. Turen varte i 108 minutter, men gjorde han verdensberømt"
+                }
+            ];
+
 
             // Resultater samles lokalt
             const results = [];
@@ -366,10 +567,12 @@
             function renderTask() {
                 status.textContent = '';
                 inputField.value = '';
-                inputField.style.display = ''; // synlig igjen ved nye oppgaver
+                inputField.style.display = ''; // vis tekstfeltet
                 startTime = null;
+                hasStartedTyping = false
 
                 if (phase === 'composition') {
+                    // 🔹 DEL 1: KOMPOSISJON (bilder → setning)
                     phaseTitle.textContent = 'DEL 1: Lag en kort setning som passer til disse bildene:';
                     imageContainer.innerHTML = '';
                     promptText.textContent = '';
@@ -387,18 +590,53 @@
                         box.appendChild(cap);
                         imageContainer.appendChild(box);
                     });
-                    progress.textContent = `Oppgave ${taskIndex + 1} av ${compositionTasks.length}`;
-                } else {
+                    // visuell progress: prosent innenfor denne fasen
+                    const percent = Math.round(((taskIndex + 1) / compositionTasks.length) * 100);
+                    const prog = el('progress');
+                    prog.querySelector('.progress-text').textContent = `Oppgave ${taskIndex + 1} av ${compositionTasks.length}`;
+                    prog.querySelector('.progress-fill').style.width = percent + '%';
+                }
+
+                else if (phase === 'transcription') {
+                    // 🔹 DEL 2: TRANSKRIPSJON (skriv nøyaktig setning)
                     phaseTitle.textContent = 'DEL 2: Skriv eller si setningen nøyaktig slik den står her:';
                     imageContainer.innerHTML = '';
-                    promptText.textContent = transcriptionTasks[taskIndex];
-                    progress.textContent = `Setning ${taskIndex + 1} av ${transcriptionTasks.length}`;
+                    const sentence = transcriptionTasks[taskIndex];
+                    promptText.innerHTML = `<strong>Setning:</strong> ${sentence}`;
+                    const percent = Math.round(((taskIndex + 1) / transcriptionTasks.length) * 100);
+                    const prog = el('progress');
+                    prog.querySelector('.progress-text').textContent = `Setning ${taskIndex + 1} av ${transcriptionTasks.length}`;
+                    prog.querySelector('.progress-fill').style.width = percent + '%';
+                }
+
+                else if (phase === 'paragraph') {
+                    // 🔹 DEL 3: AVSNITTSOPPGAVE (kort tekst på 2–3 setninger)
+                    phaseTitle.textContent = 'DEL 3: Skriv et kort avsnitt (2–3 setninger).';
+                    imageContainer.innerHTML = '';
+
+                    const task = paragraphTasks[taskIndex];
+                    promptText.innerHTML = `
+            <strong>Tema:</strong> ${task.topic}<br>
+            ${task.instruction}
+        `;
+                    const percent = Math.round(((taskIndex + 1) / paragraphTasks.length) * 100);
+                    const prog = el('progress');
+                    prog.querySelector('.progress-text').textContent = `Avsnitt ${taskIndex + 1} av ${paragraphTasks.length}`;
+                    prog.querySelector('.progress-fill').style.width = percent + '%';
                 }
             }
 
+
             // ------- Tidtaking og inndata -------
-            inputField.addEventListener('focus', () => { if (!startTime) startTime = performance.now(); });
-            inputField.addEventListener('input', () => { if (!startTime) startTime = performance.now(); });
+            let hasStartedTyping = false;
+
+            // Start tid kun når brukeren faktisk begynner å skrive (ikke bare klikker)
+            inputField.addEventListener('input', () => {
+                if (!hasStartedTyping) {
+                    startTime = performance.now();
+                    hasStartedTyping = true;
+                }
+            });
 
             // Knapphandlinger
             submitButton.addEventListener('click', () => handleSubmit(false));
@@ -410,7 +648,7 @@
             });
 
             function handleSubmit(skipped) {
-                if (!startTime) { alert('Klikk i tekstfeltet eller bruk mikrofon før du sender inn.'); return; }
+                if (!startTime) { alert('⚠️ Du må skrive eller snakke før du sender inn.'); return; }
                 const endTime = performance.now();
                 const duration = ((endTime - startTime) / 1000).toFixed(2);
                 const text = skipped ? '' : inputField.value.trim();
@@ -427,7 +665,9 @@
                     participant: meta.participant,
                     interface: meta.interfaceType,
                     taskType: phase,
-                    task: phase === 'composition' ? compositionTasks[taskIndex].map(x => x.label).join('; ') : transcriptionTasks[taskIndex],
+                    task: phase === 'composition'
+                        ? compositionTasks[taskIndex].map(x => x.label).join('; ')
+                        : transcriptionTasks[taskIndex],
                     time_s: duration,
                     response: text,
                     accuracy: accuracy
@@ -436,12 +676,20 @@
 
                 // Gå videre
                 taskIndex++;
-                if (phase === 'composition' && taskIndex >= compositionTasks.length) { phase = 'transcription'; taskIndex = 0; }
+                if (phase === 'composition' && taskIndex >= compositionTasks.length) {
+                    phase = 'transcription';
+                    taskIndex = 0;
+                }
                 else if (phase === 'transcription' && taskIndex >= transcriptionTasks.length) {
-                    showQuestionnaire(); return;
+                    phase = 'paragraph';       //  ← 🔹 NY LINJE: går videre til Del 3
+                    taskIndex = 0;
+                }
+                else if (phase === 'paragraph' && taskIndex >= paragraphTasks.length) {
+                    showQuestionnaire();       //  ← Til slutt spørreskjemaet
+                    return;
                 }
 
-                renderTask();
+                renderTask(); // viser neste oppgave
             }
 
             // ------- Talegjenkjenning (Chrome/Edge) -------
@@ -452,6 +700,14 @@
                 recognition.interimResults = false;
                 recognition.maxAlternatives = 1;
                 recognition.continuous = false;
+
+                // Legg til 'start' listener her etter at recognition er opprettet
+                recognition.addEventListener('start', () => {
+                    if (!hasStartedTyping) {
+                        startTime = performance.now();
+                        hasStartedTyping = true;
+                    }
+                });
 
                 voiceButton.addEventListener('click', () => {
                     try {
@@ -558,6 +814,14 @@
 
             // Vent til brukeren trykker "Start"
             document.getElementById('startButton').addEventListener('click', () => {
+                document.getElementById('introScreen').hidden = true;
+                document.getElementById('experimentSection').hidden = false;
+                renderTask();
+            });
+
+            document.getElementById('startButton').addEventListener('click', () => {
+                const iface = document.getElementById('interfaceType').value;
+                localStorage.setItem('interfaceType', iface);
                 document.getElementById('introScreen').hidden = true;
                 document.getElementById('experimentSection').hidden = false;
                 renderTask();
