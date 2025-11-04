@@ -728,7 +728,14 @@
                 recognition.onresult = (ev) => {
                     const text = ev.results[0][0].transcript;
                     inputField.value = text;
-                    status.textContent = '🟢 Opptak fullført.';
+
+                    // ⏱️ Stopp tid når opptak ferdig
+                    const endTime = performance.now();
+                    const duration = ((endTime - startTime) / 1000).toFixed(2);
+                    status.textContent = `🟢 Opptak fullført. Klikk "Send inn" for å lagre.`;
+
+                    // Sørg for at startTime ikke nullstilles
+                    hasStartedTyping = true;
                     voiceButton.setAttribute('aria-pressed', 'false');
                 };
                 recognition.onerror = (ev) => {
