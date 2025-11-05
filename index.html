@@ -359,6 +359,11 @@
             <!-- 🟢 STARTSIDE før eksperimentet -->
             <section id="introScreen">
                 <h2>Velkommen til eksperimentet 👋</h2>
+
+                <label for="participantId">Deltaker-ID:</label>
+                <input type="text" id="participantId" placeholder="F.eks. 1, 2, 3 ..." required>
+                <br><br>
+
                 <p>
                     Du skal sammenligne tre måter å skrive på: <strong>Tastatur/mus</strong>, <strong>Touch</strong> og
                     <strong>Tale</strong>.
@@ -406,6 +411,8 @@
                     <option value="touch">Touch (mobil / nettbrett)</option>
                     <option value="voice">Tale</option>
                 </select>
+
+
 
                 <p style="text-align:center;margin-top:22px;">
                     <button id="startButton"
@@ -555,29 +562,39 @@
 
             // Start-knappen: lagre valgt metode og start eksperimentet
             document.getElementById('startButton').addEventListener('click', () => {
-                const iface = document.getElementById('interfaceType').value.trim().toLowerCase();
-                localStorage.setItem('interfaceType', iface);
+                const pid = document.getElementById('participantId').value.trim();
+                const iface = document.getElementById('interfaceType').value;
 
-                // Oppdater meta direkte slik at riktig interface brukes videre
+                if (!pid) {
+                    alert("Du må skrive inn deltaker-ID før du starter.");
+                    return;
+                }
+
+                // lagre meta-data
+                meta.participant = pid;
                 meta.interfaceType = iface;
+
+                localStorage.setItem("participantId", pid);
+                localStorage.setItem("interfaceType", iface);
 
                 document.getElementById('introScreen').hidden = true;
                 document.getElementById('experimentSection').hidden = false;
+
                 renderTask();
             });
 
 
             // Deltakerinfo via modal 
             function getParticipantInfo() {
-                const storedPid = localStorage.getItem('participantID');
+                const storedPid = localStorage.getItem('participantId');
                 const storedIface = localStorage.getItem('interfaceType');
+
                 const pid = storedPid && storedPid.trim() ? storedPid : 'ukjent';
                 const iface = storedIface && storedIface.trim() ? storedIface : 'ukjent';
-                // sørg for at verdiene er lagret for senere
-                if (!storedPid) localStorage.setItem('participantID', pid);
-                if (!storedIface) localStorage.setItem('interfaceType', iface);
+
                 return { participant: pid, interfaceType: iface };
             }
+
 
             // Få deltakerinfo før vi fortsetter
             const meta = await getParticipantInfo();
