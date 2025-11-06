@@ -32,6 +32,8 @@ total_rows = 0
 
 # 3️ LES OG HENT UT DATA
 
+questionnaire = {}
+
 for file_name in csv_files:
     file_path = os.path.join(folder_path, file_name)
     print(f"🔹 Leser {file_name}")
@@ -59,6 +61,7 @@ for file_name in csv_files:
                 try:
                     time_s = float(row[i_time].replace(",", "."))
                     acc = float(row[i_acc].replace(",", "."))
+                    
                 except ValueError:
                     continue
 
@@ -95,9 +98,23 @@ for interface, avg_time, avg_acc in summary:
 
 # 5️ VIS GRAFER (Plotly)
 
-interfaces = [s[0] for s in summary]
+norske_navn = {
+    "Keyboard": "Tastatur",
+    "Voice": "Tale",
+    "Touch": "Berøring"
+    }
+
+interfaces = [norske_navn.get(s[0], s[0]) for s in summary]
 avg_times = [s[1] for s in summary]
 avg_accs = [s[2] for s in summary]
+
+bar_colors = {
+    "Keyboard": "#3A6FF7",  # blå
+    "Voice": "#F25C54",     # rød
+    "Touch": "#2ABF7B"      # grønn
+}
+
+line_color = "#A020F0"
 
 # Gjennomsnittlig tid
 fig1 = px.bar(
@@ -123,16 +140,40 @@ fig2.show()
 
 # Kombinert graf (tid + nøyaktighet)
 fig3 = px.bar(
-    x=interfaces, y=avg_times, color=interfaces,
-    title="🧩 Tid og nøyaktighet per metode"
+    x=interfaces,
+    y=avg_times,
+    color=interfaces,
+    text=[f"{t:.2f} sek<br>{a:.1f} % nøyaktighet" for t, a in zip(avg_times, avg_accs)],
+    title="🧩 Oppsummering: Tid og nøyaktighet per metode",
+    labels={"x": "Inndatametode", "y": "Tid (sekunder)"}
 )
-fig3.add_scatter(
-    x=interfaces, y=avg_accs, mode="lines+markers",
-    name="Nøyaktighet (%)", yaxis="y2"
+
+# Flytt tekstene over søylene
+fig3.update_traces(
+    textposition="outside",
+    hovertemplate="<b>%{x}</b><br>Tid: %{y:.2f} sek<br>Nøyaktighet: %{text}"
 )
+
+# Ryddig layout og legende
 fig3.update_layout(
-    yaxis=dict(title="Tid (sekunder)"),
-    yaxis2=dict(title="Nøyaktighet (%)", overlaying="y", side="right"),
-    legend=dict(x=0.8, y=1)
+    showlegend=True,
+    legend_title_text="Metode",
+    plot_bgcolor="rgba(0,0,0,0)",
+    paper_bgcolor="rgba(0,0,0,0)",
+    margin=dict(l=50, r=10, t=70, b=50),
+    yaxis=dict(title="Tid (sekunder)")
 )
+
+fig3.update_yaxes(range=[0, max(avg_times)*1.25])
+
+# Flytt legende ut av grafen (til høyre)
+fig3.update_layout(
+    legend=dict(
+        x=1.05,
+        y=1,
+        traceorder="normal",
+        bgcolor="rgba(255,255,255,0.0)"
+    )
+)
+
 fig3.show()

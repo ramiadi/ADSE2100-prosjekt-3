@@ -1,0 +1,25 @@
+participant,interface,taskType,task,time_s,response,accuracy
+5,Voice,composition,Gutt Båt Katt,6.77,gutt med caps and båt og katt,
+5,Voice,composition,Eple Lege Hus,5.29,rødt eple lege og en hus,
+5,Voice,composition,Kvinne Fly Baby,4.53,kvinner møbler fly og en baby,
+5,Voice,composition,Mann Hund Bil,3.30,en mann hund og bil,
+5,Voice,composition,Jente Sykkel Tre,4.44,jente rosa gensere sykkelen 3,
+5,Voice,composition,Lærer Bok Klasserom,2.82,lærer en bok og klasserom,
+5,Voice,composition,Kokk Pizza Kjøkken,2.68,kort priser kjøkken,
+5,Voice,composition,Brannmann Brannbil Ild,5.05,brannbil og ild,
+5,Voice,composition,Politimann Bil Vei,3.15,politimannen bil og vei,
+5,Voice,composition,Student Laptop Kaffe,3.10,student laptop kaffe,
+5,Voice,transcription,Gutten tar med katten sin på båten.,3.14,Gutten tar med katten sin på båten,97.14
+5,Voice,transcription,Legen spiser et eple før han drar hjem.,4.08,legen spiser et eple før han drar hjem,97.44
+5,Voice,transcription,Kvinnen flyr med babyen sin på flyet.,3.30,Kvinnen flyr med babyen sin på flyet,97.30
+5,Voice,transcription,Mannen kjører bilen sin mens hunden ser ut av vinduet.,4.43,Mannen kjører billigste mens hun ser ut av vinduet,83.33
+5,Voice,transcription,Jenta sykler gjennom skogen ved et stort tre.,4.07,jenta sykler gjennom skogen ved et stort tre,97.78
+5,Voice,transcription,Læreren holder en bok foran klassen i klasserommet.,4.08,læreren holder en bok foran klassen i klasserommet,98.04
+5,Voice,transcription,Kokken lager pizza på kjøkkenet sitt.,3.39,Kokken lager pizza på kjøkkenet sitt,97.30
+5,Voice,transcription,Brannmannen slukker ild med en brannbil.,3.36,Brannmannen slukker ild med en brannbil,97.50
+5,Voice,transcription,Politimannen patruljerer veien i bilen sin.,3.75,politimann patruljerer veien i byen sin,88.37
+5,Voice,transcription,Studenten jobber på laptopen sin med en kopp kaffe ved siden av.,4.34,studenten jobber på laptopen sin med en kopp kaffe ved siden av,98.44
+5,Voice,paragraph,Svarte hull,9.93,et svart hull er et sted i verdensrommet med ekstremt tyngdekraft alt som kommer fra fornærmelig dratt inn ikke engang det slipper ut,87.22
+5,Voice,paragraph,Livet i rommet,8.69,astronauter må feste seg når de sover ellers,28.03
+5,Voice,paragraph,Første menneske i rommet,15.09,den første personen i verdensrommet het juli i Bergen Han kom fra Russland og reiste rundt jorden i 1961 turen varte i 108 minutter med Jordan verdensberømt,89.63
+5,Voice,questionnaire,q1:3 q2:2,,,

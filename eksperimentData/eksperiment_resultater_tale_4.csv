@@ -1,0 +1,25 @@
+participant,interface,taskType,task,time_s,response,accuracy
+4,Voice,composition,Gutt Båt Katt,4.62,båt og katt,
+4,Voice,composition,Eple Lege Hus,3.87,eple legehus,
+4,Voice,composition,Kvinne Fly Baby,3.35,kvinne fly baby,
+4,Voice,composition,Mann Hund Bil,2.96,man hund bil,
+4,Voice,composition,Jente Sykkel Tre,2.96,jentesykkel 3,
+4,Voice,composition,Lærer Bok Klasserom,2.99,lærer bok klasserom,
+4,Voice,composition,Kokk Pizza Kjøkken,2.89,kokk pizza kjøkken,
+4,Voice,composition,Brannmann Brannbil Ild,3.07,brannmann brannbil ild,
+4,Voice,composition,Politimann Bil Vei,2.89,politimann bil vei,
+4,Voice,composition,Student Laptop Kaffe,3.21,student laptop kaffe,
+4,Voice,transcription,Gutten tar med katten sin på båten.,2.93,Gutten tar med katten sin på båten,97.14
+4,Voice,transcription,Legen spiser et eple før han drar hjem.,3.32,leger spiser et eple før han drar hjem,94.87
+4,Voice,transcription,Kvinnen flyr med babyen sin på flyet.,2.99,Kvinnen fyller med babyen sin på flyet,89.47
+4,Voice,transcription,Mannen kjører bilen sin mens hunden ser ut av vinduet.,5.96,man kjører billig sin mens hunden ser ut av vinduet,87.04
+4,Voice,transcription,Jenta sykler gjennom skogen ved et stort tre.,3.55,gjenta sykler gjennom skogen ved et stort tre,95.56
+4,Voice,transcription,Læreren holder en bok foran klassen i klasserommet.,4.09,læreren holder en bok foran klassen i klasserommet,98.04
+4,Voice,transcription,Kokken lager pizza på kjøkkenet sitt.,3.65,hvor kan lage pizza på kjøkkenet sitt,81.08
+4,Voice,transcription,Brannmannen slukker ild med en brannbil.,3.61,brannmann slukker ild med en brannbil,92.50
+4,Voice,transcription,Politimannen patruljerer veien i bilen sin.,6.35,politimann patruljerer veien i begynnelsen,76.74
+4,Voice,transcription,Studenten jobber på laptopen sin med en kopp kaffe ved siden av.,4.48,studenter jobber med på laptop sin med en kopp kaffe ved siden av,87.69
+4,Voice,paragraph,Svarte hull,8.80,et svart hull er et sted i verdensrommet med ekstrem tyngdekraft alt som kommer for nær ble dratt inn ikke engang lys slipper ut,94.74
+4,Voice,paragraph,Livet i rommet,5.68,astronauter må feste seg når de sover eller,27.39
+4,Voice,paragraph,Første menneske i rommet,9.04,den første personen i verdensrommet hedger han kom fra Russland og reiste rundt Jorden,51.22
+4,Voice,questionnaire,q1:5 q2:5,,,

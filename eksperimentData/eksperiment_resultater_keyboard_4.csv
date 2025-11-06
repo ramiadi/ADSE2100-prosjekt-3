@@ -1,0 +1,25 @@
+participant,interface,taskType,task,time_s,response,accuracy
+4,keyboard,composition,Gutt Båt Katt,3.91,gutt båt katt,
+4,keyboard,composition,Eple Lege Hus,3.45,eple lege hus,
+4,keyboard,composition,Kvinne Fly Baby,3.99,kvinne fly baby,
+4,keyboard,composition,Mann Hund Bil,2.85,mann hund bil,
+4,keyboard,composition,Jente Sykkel Tre,3.32,jente sykkel tre,
+4,keyboard,composition,Lærer Bok Klasserom,7.63,lærer bok klassrom,
+4,keyboard,composition,Kokk Pizza Kjøkken,4.14,kokk pizza kjøkken,
+4,keyboard,composition,Brannmann Brannbil Ild,6.11,brannmann brannbil ild,
+4,keyboard,composition,Politimann Bil Vei,4.84,politimann bil vei,
+4,keyboard,composition,Student Laptop Kaffe,6.72,student laptop kaffe,
+4,keyboard,transcription,Gutten tar med katten sin på båten.,7.07,gutten tar med katten sin på båten,97.14
+4,keyboard,transcription,Legen spiser et eple før han drar hjem.,9.38,legen spiser eet eple før han drar hjem,94.87
+4,keyboard,transcription,Kvinnen flyr med babyen sin på flyet.,7.25,kvinnen flyr med babyen sin på flyet,97.30
+4,keyboard,transcription,Mannen kjører bilen sin mens hunden ser ut av vinduet.,16.04,mannen kjører bilen sin mens hunden ser ut av vinduet,98.15
+4,keyboard,transcription,Jenta sykler gjennom skogen ved et stort tre.,9.93,jenta sykler gjennom skogen ved et stort tre,97.78
+4,keyboard,transcription,Læreren holder en bok foran klassen i klasserommet.,10.17,læreren holder en bok forann klassen i klasserommet,96.08
+4,keyboard,transcription,Kokken lager pizza på kjøkkenet sitt.,8.57,kokken lager pizza på kjøkknet sitt,94.59
+4,keyboard,transcription,Brannmannen slukker ild med en brannbil.,6.87,brannmannen slukker ild med en brannbil,97.50
+4,keyboard,transcription,Politimannen patruljerer veien i bilen sin.,8.03,politimanenn patruljerer veien i bilen sin,93.02
+4,keyboard,transcription,Studenten jobber på laptopen sin med en kopp kaffe ved siden av.,15.68,studenten jobber på laptopen sin med en kopp kaffe ved siden av,98.44
+4,keyboard,paragraph,Svarte hull,1.43,Et svart hull er et sted i verdensrommet med ekstrem tyngdekraft. Alt som kommer for nær  blir dratt inn. Ikke engang lys slippes ut.,100.00
+4,keyboard,paragraph,Livet i rommet,1.04,Et svart hull er et sted i verdensrommet med ekstrem tyngdekraft. Alt som kommer for nær  blir dratt inn. Ikke engang lys slippes ut.,26.11
+4,keyboard,paragraph,Første menneske i rommet,9.72,Den første personen i verdensrommet het Jurij Gagarin. Han kom fra Russland og reiste rundt jorden i 1961. Turen varte i 108 minutter  men gjorde han verdensberømt.,100.00
+4,keyboard,questionnaire,q1:3 q2:3,,,

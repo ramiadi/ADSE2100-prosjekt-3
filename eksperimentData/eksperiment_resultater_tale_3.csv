@@ -1,0 +1,25 @@
+participant,interface,taskType,task,time_s,response,accuracy
+3,Voice,composition,Gutt Båt Katt,7.70,gutt med rosa caps en båt og en oransje ta en katt,
+3,Voice,composition,Eple Lege Hus,4.78,rød eple en lege og et hvitt,
+3,Voice,composition,Kvinne Fly Baby,5.39,kvinne med Blazer er fly og en baby med blå,
+3,Voice,composition,Mann Hund Bil,3.79,en mann i dress,
+3,Voice,composition,Jente Sykkel Tre,3.92,ei jente en sykkel og et tre,
+3,Voice,composition,Lærer Bok Klasserom,3.49,en lærer bok og klasserom,
+3,Voice,composition,Kokk Pizza Kjøkken,4.56,kokken og pizza og hans kjøkken,
+3,Voice,composition,Brannmann Brannbil Ild,4.47,brannmann en brannbil og flamme,
+3,Voice,composition,Politimann Bil Vei,4.10,politimann en bil og veien,
+3,Voice,composition,Student Laptop Kaffe,4.17,Stud,
+3,Voice,transcription,Gutten tar med katten sin på båten.,3.19,Gutten tar med katten sin på båten,97.14
+3,Voice,transcription,Legen spiser et eple før han drar hjem.,3.13,legen spiser et eple før han drar hjem,97.44
+3,Voice,transcription,Kvinnen flyr med babyen sin på flyet.,9.76,Kvinnen flyr med babyen sin på flyet,97.30
+3,Voice,transcription,Mannen kjører bilen sin mens hunden ser ut av vinduet.,4.05,Mannen kjører bilen sin mens hunden ser ut av vinduet,98.15
+3,Voice,transcription,Jenta sykler gjennom skogen ved et stort tre.,3.83,gjenta sykler gjennom skogen ved et stort tre,95.56
+3,Voice,transcription,Læreren holder en bok foran klassen i klasserommet.,3.96,læreren holder en bok foran klassen i klasserommet,98.04
+3,Voice,transcription,Kokken lager pizza på kjøkkenet sitt.,5.33,Kokken lager pizza på kjøkkenet sitt,97.30
+3,Voice,transcription,Brannmannen slukker ild med en brannbil.,11.60,brannmann slukker ild med en brann,85.00
+3,Voice,transcription,Politimannen patruljerer veien i bilen sin.,4.17,politimannen patruljerer veien i bilen sin,97.67
+3,Voice,transcription,Studenten jobber på laptopen sin med en kopp kaffe ved siden av.,4.56,synden jobber med laptopen sin med en kopp kaffe ved siden av,85.94
+3,Voice,paragraph,Svarte hull,7.59,et svart hull er et sted i verdensrommet med ekstremt tyngdekraft alt som kommer for nirve blir dratt inn,74.44
+3,Voice,paragraph,Livet i rommet,25.58,Australia uter må feste seg når de sover,20.38
+3,Voice,paragraph,Første menneske i rommet,8.79,den første personen i verdensrommet head juli Garden han kom fra Russland og reiste rundt jorden i 1961,58.54
+3,Voice,questionnaire,q1:5 q2:5,,,
