@@ -1,0 +1,25 @@
+participant,interface,taskType,task,time_s,response,accuracy
+11,voice,composition,Gutt Båt Katt,11.88,en gutt seiler en båt med katten sin,
+11,voice,composition,Eple Lege Hus,3.67,en neger spiser et eple i huset sitt,
+11,voice,composition,Kvinne Fly Baby,3.78,en kvinne er i et fly med babyen sin,
+11,voice,composition,Mann Hund Bil,7.15,En mann kjører en bil med hund sin,
+11,voice,composition,Jente Sykkel Tre,6.22,jente er på en tur og ser et tre og ser en sykkel,
+11,voice,composition,Lærer Bok Klasserom,4.83,en lærer leser en bok foran klasserommet,
+11,voice,composition,Kokk Pizza Kjøkken,2.97,En kokk lager en pizza på kjøkkenet,
+11,voice,composition,Brannmann Brannbil Ild,4.58,en Brannmann slukker inn i en brannbil,
+11,voice,composition,Politimann Bil Vei,4.18,en politimann vandrer med en bil på en vei,
+11,voice,composition,Student Laptop Kaffe,4.95,er student studerer på laptopen sin og drikker en kopp kaffe,
+11,voice,transcription,Gutten tar med katten sin på båten.,3.21,Gutten tar med katten sin på båten,97.14
+11,voice,transcription,Legen spiser et eple før han drar hjem.,3.27,legen spiser et eple før han drar hjem,97.44
+11,voice,transcription,Kvinnen flyr med babyen sin på flyet.,11.31,,0.00
+11,voice,transcription,Mannen kjører bilen sin mens hunden ser ut av vinduet.,5.60,Mannen kjører bilen sin mens hunden ser ut av vinduet,98.15
+11,voice,transcription,Jenta sykler gjennom skogen ved et stort tre.,4.59,gjenta sykehjem og skogen ved et stort tre,80.00
+11,voice,transcription,Læreren holder en bok foran klassen i klasserommet.,4.97,læreren holder en bok foran klassen i,72.55
+11,voice,transcription,Kokken lager pizza på kjøkkenet sitt.,4.88,hvordan lage pizza på kjøkkenet sitt,81.08
+11,voice,transcription,Brannmannen slukker ild med en brannbil.,4.49,Brannmannen slukker ild med en brannbil,97.50
+11,voice,transcription,Politimannen patruljerer veien i bilen sin.,4.55,politimannen patruljerer veien i bilen sin,97.67
+11,voice,transcription,Studenten jobber på laptopen sin med en kopp kaffe ved siden av.,5.12,studenten jobber på laptopen sin en kopp kaffe ved siden av,92.19
+11,voice,paragraph,Svarte hull,8.73,ekstremt tyngdekraft alt som kommer for nær blir dratt inn,42.86
+11,voice,paragraph,Livet i rommet,10.59,astronauter må feste seg når de sover eller spruter rundt De spiser mat de poser og pusser tennene uten vann alt flyter i vekkelse til og med tårene dems,84.71
+11,voice,paragraph,Første menneske i rommet,13.23,den første personen i verdensrommet het juridisk Karin han kom fra Russland og reiste rundt jorden i 1961 turen varte i 108 minutter og gjorde en vanskelig,85.37
+11,voice,questionnaire,q1:5 q2:1,,,

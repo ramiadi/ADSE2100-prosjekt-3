@@ -1,0 +1,25 @@
+participant,interface,taskType,task,time_s,response,accuracy
+10,keyboard,composition,Gutt Båt Katt,11.59,En gutt er på båten med katten sin.,
+10,keyboard,composition,Eple Lege Hus,19.74,Et eple fra legen er anbefalt i et hus,
+10,keyboard,composition,Kvinne Fly Baby,10.95,Kvinnen flyr i et fly med babyen sin,
+10,keyboard,composition,Mann Hund Bil,8.57,En mann har en hund i en bil.,
+10,keyboard,composition,Jente Sykkel Tre,8.06,En jente sykler ved et tre.,
+10,keyboard,composition,Lærer Bok Klasserom,11.58,En lærer leser en bok foran i klasserommet.,
+10,keyboard,composition,Kokk Pizza Kjøkken,10.64,En kokk lager en pizza i kjøkkenet,
+10,keyboard,composition,Brannmann Brannbil Ild,9.40,En brannmann slukker ild med en brannbil.,
+10,keyboard,composition,Politimann Bil Vei,12.26,En politimann kjører en bil på vei.,
+10,keyboard,composition,Student Laptop Kaffe,11.74,En student drikker en kaffe og er på sin laptop,
+10,keyboard,transcription,Gutten tar med katten sin på båten.,6.73,Gutten tar med katten sin på båten.,100.00
+10,keyboard,transcription,Legen spiser et eple før han drar hjem.,9.51,Legen spiser et eple før han drar hjem.,100.00
+10,keyboard,transcription,Kvinnen flyr med babyen sin på flyet.,8.71,Kvinnen flyr med babyen sin på flyet.,100.00
+10,keyboard,transcription,Mannen kjører bilen sin mens hunden ser ut av vinduet.,11.70,Mannen kjører bilen sin mens hunden ser ut av vinduet.,100.00
+10,keyboard,transcription,Jenta sykler gjennom skogen ved et stort tre.,9.27,Jenta sykler gjennom skogen ved et stort tre.,100.00
+10,keyboard,transcription,Læreren holder en bok foran klassen i klasserommet.,9.35,Læreren holder en bok foran klassen i klasserommet.,100.00
+10,keyboard,transcription,Kokken lager pizza på kjøkkenet sitt.,9.57,Kokken lager pizze på kjøkkenet sitt.,97.30
+10,keyboard,transcription,Brannmannen slukker ild med en brannbil.,8.21,Brannmannen slukker ild med en brannbil.,100.00
+10,keyboard,transcription,Politimannen patruljerer veien i bilen sin.,14.87,Politimannen patruljerer veien i bilen sin.,100.00
+10,keyboard,transcription,Studenten jobber på laptopen sin med en kopp kaffe ved siden av.,14.15,Studenten jobber på laptopen sin med en kopp kaffe ved siden av.,100.00
+10,keyboard,paragraph,Svarte hull,34.67,Et svart hull er et sted i verdensrommet med ekstrem tyngdekraft. Alt som kommer for nær  blir dratt inn. Ikke engang lys slippes ut.,100.00
+10,keyboard,paragraph,Livet i rommet,35.96,Astronauter må feste seg når de sover  ellers flyter de rundt. De spiser mat i poser og pusser tennene uten vann. Alt flyter i vektløshet  til og med tårene.,100.00
+10,keyboard,paragraph,Første menneske i rommet,39.13,Den første personen i verdensrommet het Jurij Gagarin. Han kom fra Russland og reiste rundt jorden i 1961. turen varte i 108 minutter  men ghorde han verdensberømt.,99.39
+10,keyboard,questionnaire,q1:4 q2:2,,,

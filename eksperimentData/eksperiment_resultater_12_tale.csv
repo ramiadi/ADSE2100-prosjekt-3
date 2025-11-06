@@ -1,0 +1,25 @@
+participant,interface,taskType,task,time_s,response,accuracy
+12,voice,composition,Gutt Båt Katt,4.60,hatten er min gutt på en båt,
+12,voice,composition,Eple Lege Hus,4.23,leker spiser et eple i huset sitt,
+12,voice,composition,Kvinne Fly Baby,3.75,en kvinne er en bor med en fly,
+12,voice,composition,Mann Hund Bil,3.92,Mannen er min hund i en by,
+12,voice,composition,Jente Sykkel Tre,2.95,en jente sykler vet sko,
+12,voice,composition,Lærer Bok Klasserom,2.90,en lærer lesende bok i et klasserom,
+12,voice,composition,Kokk Pizza Kjøkken,3.93,Kokken spiser en pizza på kjøkkenet,
+12,voice,composition,Brannmann Brannbil Ild,4.58,brannmann slukker en del ved bruk av en,
+12,voice,composition,Politimann Bil Vei,7.04,en politimann bruker en bil på en vei,
+12,voice,composition,Student Laptop Kaffe,6.89,en student bruker en laptop å drikke kaffe,
+12,voice,transcription,Gutten tar med katten sin på båten.,10.31,Gutten tar med katten sin på båten,97.14
+12,voice,transcription,Legen spiser et eple før han drar hjem.,5.50,egen spiser et eple før Andrea,74.36
+12,voice,transcription,Kvinnen flyr med babyen sin på flyet.,3.83,Kvinnen fly med babyseng på flyet,81.08
+12,voice,transcription,Mannen kjører bilen sin mens hunden ser ut av vinduet.,5.30,Mannen kjører bilen sin mens hun ser ut av vinduet,92.59
+12,voice,transcription,Jenta sykler gjennom skogen ved et stort tre.,4.56,gjenta sykler gjennom skogen ved et stort tre,95.56
+12,voice,transcription,Læreren holder en bok foran klassen i klasserommet.,6.17,læreren holder en bok foran klassen i klasserommet,98.04
+12,voice,transcription,Kokken lager pizza på kjøkkenet sitt.,4.40,Kokken lager pizza på kjøkkenet sitt,97.30
+12,voice,transcription,Brannmannen slukker ild med en brannbil.,3.84,brannmann slukker ild med en brannbil,92.50
+12,voice,transcription,Politimannen patruljerer veien i bilen sin.,4.63,politimannen patruljerer veien i byen sin,93.02
+12,voice,transcription,Studenten jobber på laptopen sin med en kopp kaffe ved siden av.,6.06,studenten jobber på laptop si med en kopp kaffe ved siden av,93.75
+12,voice,paragraph,Svarte hull,8.11,et svart hull er et sted i verdensrommet med eksterne tyngdekraft og så kommer for nær bli dratt inn ikke engang liv,81.20
+12,voice,paragraph,Livet i rommet,24.52,astronauter må få seg når de sover eller flyter de rundt De spiser mat de poser og pusser tennene,59.24
+12,voice,paragraph,Første menneske i rommet,9.90,første person i mann som heter Juridisk avdeling Han kommer fra Russland reiser rundt jorden i 1961 turen varte 18 minutter med Johan,62.20
+12,voice,questionnaire,q1:5 q2:2,,Tale er dårlig i flere setninger,
